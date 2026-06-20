@@ -10,11 +10,10 @@
       ./hardware-configuration.nix
     ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Bootloader (Limineマルチブート用に独自インストールを無効化)
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.generic-extlinux-compatible.enable = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -51,13 +50,19 @@
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
-  # Default Desktop Environment.
-  services.displayManager.defaultSession = "hyprland";
 
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
+  };
+
+  # 日本語入力
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+    fcitx5.addons = [ pkgs.fcitx5-mozc ];
+    fcitx5.waylandFrontend = true;
   };
 
   # Enable CUPS to print documents.
@@ -83,12 +88,11 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users."sadanora" = {
+  users.users."${config.var.username}" = {
     isNormalUser = true;
-    description = "sadanora";
+    description = "${config.var.username}";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-    #  thunderbird
     ];
   };
 
@@ -149,3 +153,4 @@
   # Hyprland
   programs.hyprland.enable = true;
 }
+
