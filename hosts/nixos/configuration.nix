@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
@@ -12,8 +12,9 @@
 
   # Bootloader (Limineマルチブート用に独自インストールを無効化)
   boot.loader.systemd-boot.enable = false;
-  boot.loader.generic-extlinux-compatible.enable = true;
+  boot.loader.generic-extlinux-compatible.enable = false;
 
+  boot.loader.grub.enable = false;
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -102,10 +103,16 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # set nixPath
+  nix.nixPath = [
+    "nixpkgs=${inputs.nixpkgs}"
+  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     neovim
+    vscode
     wget
     curl
     git
@@ -113,6 +120,7 @@
     gh
     wl-clipboard
     cliphist
+    google-chrome
   ];
 
   fonts.packages = [
