@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ../../modules/nixos/desktop-gnome.nix
       ../../modules/nixos/desktop-hyprland.nix
+      ../../modules/nixos/graphics-nvidia.nix
       ../../modules/nixos/limine-nixos-generations.nix
     ];
 
