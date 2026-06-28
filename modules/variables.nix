@@ -13,6 +13,42 @@
       description = "Default hostname";
     };
 
+    apps = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          terminal = lib.mkOption {
+            type = lib.types.str;
+            default = "kitty";
+            description = "Default terminal command";
+          };
+          browser = lib.mkOption {
+            type = lib.types.str;
+            default = "google-chrome-stable";
+            description = "Default browser command";
+          };
+          launcher = lib.mkOption {
+            type = lib.types.str;
+            default = "rofi -show drun";
+            description = "Default application launcher command";
+          };
+        };
+      };
+      default = {};
+    };
+
+    theme = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          wallpaper = lib.mkOption {
+            type = lib.types.str;
+            default = "galaxy.webp";
+            description = "Default wallpaper file from modules/themes/wallpapers";
+          };
+        };
+      };
+      default = {};
+    };
+
     # Monitor configurations
     monitors = lib.mkOption {
       type = lib.types.submodule {
@@ -47,4 +83,3 @@
     networking.hostName = config.var.hostname;
   };
 }
-

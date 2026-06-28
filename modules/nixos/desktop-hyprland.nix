@@ -9,6 +9,8 @@
     withUWSM = true;
   };
 
+  programs.hyprlock.enable = true;
+
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
