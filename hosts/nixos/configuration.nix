@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ../../modules/nixos/desktop-gnome.nix
       ../../modules/nixos/desktop-hyprland.nix
+      ../../modules/nixos/limine-nixos-generations.nix
     ];
 
   # Bootloader (Limineマルチブート用に独自インストールを無効化)
