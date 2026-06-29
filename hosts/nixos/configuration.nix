@@ -8,8 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/nixos/desktop-gnome.nix
-      ../../modules/nixos/desktop-hyprland.nix
+      ../../modules/desktop/gnome
+      ../../modules/desktop/hyprland
       ../../modules/nixos/graphics-nvidia.nix
       ../../modules/nixos/limine-nixos-generations.nix
     ];

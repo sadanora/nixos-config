@@ -7,7 +7,7 @@
 
   imports = [
     ./bash.nix
-    ./hyprland.nix
+    ../desktop/hyprland/home.nix
   ];
 
   xdg.userDirs = {
@@ -30,4 +30,3 @@
 
   programs.home-manager.enable = true;
 }
-

@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./variables.nix
+  ];
+
   # Hyprland is the primary daily desktop. System-level setup owns the session,
   # portals, and shared desktop integration; Home Manager owns user config.
   programs.hyprland = {
@@ -10,6 +14,8 @@
   };
 
   programs.hyprlock.enable = true;
+
+  services.gnome.gnome-keyring.enable = true;
 
   xdg.portal = {
     enable = true;
