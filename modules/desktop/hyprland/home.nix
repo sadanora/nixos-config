@@ -210,6 +210,7 @@ in
           interval = 10;
           format = "󰍛 {usage}%";
           format-alt = "{icon0}{icon1}{icon2}{icon3}";
+          on-click = "${cfg.apps.terminal} -e ${pkgs.btop}/bin/btop";
           format-icons = [
             "▁"
             "▂"
@@ -226,6 +227,7 @@ in
           interval = 30;
           format = "󰾆 {percentage}%";
           format-alt = "󰾅 {used}GB";
+          on-click = "${cfg.apps.terminal} -e ${pkgs.btop}/bin/btop";
           tooltip-format = " {used:.1f}GB/{total:.1f}GB";
         };
 
@@ -273,6 +275,7 @@ in
           format-linked = "󰤪 Linked";
           format-disconnected = "󰤮 Off";
           format-alt = "󰤨 {signalStrength}%";
+          on-click = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
           tooltip-format = "󱘖 {ipaddr}   {bandwidthUpBytes}   {bandwidthDownBytes}";
         };
 
@@ -280,6 +283,7 @@ in
           format = "";
           format-disabled = "󰂲";
           format-connected = " {num_connections}";
+          on-click = "${pkgs.blueman}/bin/blueman-manager";
           tooltip-format = " {device_alias}";
           tooltip-format-connected = "{device_enumerate}";
           tooltip-format-enumerate-connected = " {device_alias}";
@@ -504,6 +508,9 @@ in
     wlogout
     pamixer
     pavucontrol
+    btop
+    networkmanagerapplet
+    blueman
     clipboardMenu
     keybindings
   ];

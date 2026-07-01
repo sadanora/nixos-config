@@ -16,6 +16,7 @@
   programs.hyprlock.enable = true;
 
   services.gnome.gnome-keyring.enable = true;
+  services.blueman.enable = true;
 
   xdg.portal = {
     enable = true;
