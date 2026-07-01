@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   options.var.hyprland = {
@@ -32,6 +32,28 @@
             type = lib.types.str;
             default = "galaxy.webp";
             description = "Default wallpaper file from modules/themes/wallpapers";
+          };
+          cursor = lib.mkOption {
+            type = lib.types.submodule {
+              options = {
+                package = lib.mkOption {
+                  type = lib.types.package;
+                  default = pkgs.bibata-cursors;
+                  description = "Cursor theme package";
+                };
+                name = lib.mkOption {
+                  type = lib.types.str;
+                  default = "Bibata-Modern-Ice";
+                  description = "Cursor theme name";
+                };
+                size = lib.mkOption {
+                  type = lib.types.int;
+                  default = 24;
+                  description = "Cursor size";
+                };
+              };
+            };
+            default = {};
           };
         };
       };

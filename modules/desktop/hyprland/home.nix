@@ -2,6 +2,7 @@
 
 let
   cfg = osConfig.var.hyprland;
+  cursor = cfg.theme.cursor;
   wallpaperFile = cfg.theme.wallpaper;
   wallpaperPath = "${config.home.homeDirectory}/.local/share/wallpapers/${wallpaperFile}";
   hyprpaperConfig = lib.concatStringsSep "\n" ([
@@ -63,12 +64,22 @@ in
         mainPosition = "${cfg.monitors.mainPosition}"
         subPosition = "${cfg.monitors.subPosition}"
         monitorScale = "${cfg.monitors.scale}"
+
+        cursorTheme = "${cursor.name}"
+        cursorSize = ${toString cursor.size}
       '';
       "10-monitors".content = ./lua/monitors.lua;
       "20-input".content = ./lua/input.lua;
       "30-autostart".content = ./lua/autostart.lua;
       "40-binds".content = ./lua/binds.lua;
     };
+  };
+
+  home.pointerCursor = {
+    inherit (cursor) package name size;
+    gtk.enable = true;
+    x11.enable = true;
+    hyprcursor.enable = true;
   };
 
   programs.waybar = {
