@@ -1,6 +1,5 @@
 hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE")
-    hl.exec_cmd("uwsm app -- fcitx5 -d --replace")
     hl.exec_cmd("uwsm app -- hyprpaper")
     hl.exec_cmd("uwsm app -- waybar")
     hl.exec_cmd("uwsm app -- hypridle")

@@ -14,7 +14,12 @@ let
     ""
   ]);
   clipboardMenu = pkgs.writeShellScriptBin "hypr-clipboard-menu" ''
-    cliphist list | rofi -dmenu -i -p clipboard | cliphist decode | wl-copy
+    selection="$(cliphist list | rofi -dmenu -i -p clipboard)"
+    if [ -n "$selection" ]; then
+      printf '%s' "$selection" | cliphist decode | wl-copy
+      sleep 0.05
+      hyprctl dispatch 'hl.dsp.send_shortcut("CTRL", "V", "activewindow")'
+    fi
   '';
   keybindings = pkgs.writeShellScriptBin "hypr-keybindings" ''
     cat <<'KEYS' | rofi -dmenu -i -p keybindings
