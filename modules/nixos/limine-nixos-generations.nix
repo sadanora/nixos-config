@@ -39,27 +39,17 @@ in
       copied_result="$dst"
     }
 
-    install_current_boot_files() {
-      profile="$1"
-      kernel_src="$(readlink -f "$profile/kernel")"
-      initrd_src="$(readlink -f "$profile/initrd")"
-      kernel_tmp="$boot_dir/vmlinuz-nixos.tmp.$$"
-      initrd_tmp="$boot_dir/initrd-nixos.tmp.$$"
-
-      cp "$kernel_src" "$kernel_tmp"
-      cp "$initrd_src" "$initrd_tmp"
-      mv -f "$kernel_tmp" "$boot_dir/vmlinuz-nixos"
-      mv -f "$initrd_tmp" "$boot_dir/initrd-nixos"
-    }
+    # Removed: install_current_boot_files
+    # We no longer populate /boot/vmlinuz-nixos and /boot/initrd-nixos
+    # to avoid mixing a globally fixed Limine entry with generation-managed
+    # kernel/initrd. Generation-managed copies remain under $managed_dir.
 
     entries="$(mktemp)"
     tmp_conf="$boot_dir/.limine.conf.tmp.$$"
     trap 'rm -f "$entries" "$tmp_conf" "$boot_dir/vmlinuz-nixos.tmp.$$" "$boot_dir/initrd-nixos.tmp.$$"' EXIT
 
-    current_profile=/nix/var/nix/profiles/system
-    if [ -e "$current_profile/kernel" ] && [ -e "$current_profile/initrd" ]; then
-      install_current_boot_files "$current_profile"
-    fi
+    # No longer installing top-level /boot/vmlinuz-nixos and /boot/initrd-nixos.
+    # The generation-managed entries under "$managed_dir" are used instead.
 
     {
       printf '%s\n' "$begin_marker"
@@ -146,6 +136,17 @@ in
       cat "$entries" >> "$tmp_conf"
     fi
 
-    mv -f "$tmp_conf" "$conf"
+      # Remove legacy fixed "/NixOS" entry that refers to the top-level
+      # /boot/vmlinuz-nixos and /boot/initrd-nixos. We only remove blocks
+      # whose first line equals "/NixOS" and that contain the specific
+      # path marker to avoid touching other entries.
+      awk 'BEGIN{RS=""; ORS="\n\n"} 
+        $1=="/NixOS" && index($0, "path: boot():/vmlinuz-nixos") {next} 
+        {print}' "$tmp_conf" > "$tmp_conf.clean" || true
+      if [ -e "$tmp_conf.clean" ]; then
+        mv -f "$tmp_conf.clean" "$tmp_conf"
+      fi
+
+      mv -f "$tmp_conf" "$conf"
   '';
 }
