@@ -7,6 +7,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ghostty.url = "github:ghostty-org/ghostty";
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
@@ -22,6 +23,7 @@
           ({ config, ... }: {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users."${config.var.username}" = import ./modules/home;
           })
         ];

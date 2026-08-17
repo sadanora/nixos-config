@@ -28,7 +28,7 @@ let
     case "$action" in
       copy)
         key="C"
-        if [ "$window_class" = "kitty" ]; then
+        if [ "$window_class" = "kitty" ] || [ "$window_class" = "com.mitchellh.ghostty" ]; then
           modifiers="CTRL SHIFT"
         else
           modifiers="CTRL"
@@ -36,7 +36,7 @@ let
         ;;
       paste)
         key="V"
-        if [ "$window_class" = "kitty" ]; then
+        if [ "$window_class" = "kitty" ] || [ "$window_class" = "com.mitchellh.ghostty" ]; then
           modifiers="CTRL SHIFT"
         else
           modifiers="CTRL"
@@ -203,7 +203,7 @@ in
           separate-outputs = true;
           rewrite = {
             "" = "Desktop";
-            "kitty" = "Terminal";
+            "com.mitchellh.ghostty" = "Terminal";
             "zsh" = "Terminal";
             "~" = "Terminal";
           };
@@ -557,7 +557,6 @@ in
 
   home.packages = with pkgs; [
     rofi
-    kitty
     swaynotificationcenter
     hyprpaper
     hyprlock

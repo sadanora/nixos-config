@@ -1,4 +1,4 @@
-{ config, osConfig, pkgs, ... }:
+{ config, inputs, osConfig, pkgs, ... }:
 
 {
   home.username = osConfig.var.username;
@@ -29,4 +29,8 @@
   };
 
   programs.home-manager.enable = true;
+
+  home.packages = [
+    inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
 }

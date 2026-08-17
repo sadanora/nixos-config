@@ -7,7 +7,7 @@
         options = {
           terminal = lib.mkOption {
             type = lib.types.str;
-            default = "kitty";
+            default = "ghostty";
             description = "Default terminal command";
           };
           browser = lib.mkOption {
