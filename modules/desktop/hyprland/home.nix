@@ -52,7 +52,8 @@ let
         ;;
     esac
 
-    ${pkgs.hyprland}/bin/hyprctl dispatch sendshortcut "$modifiers, $key, $target"
+    ${pkgs.hyprland}/bin/hyprctl dispatch \
+      "hl.dsp.send_shortcut({ mods = \"$modifiers\", key = \"$key\", window = \"$target\" })"
   '';
   clipboardMenu = pkgs.writeShellScriptBin "hypr-clipboard-menu" ''
     active_window="$(${pkgs.hyprland}/bin/hyprctl activewindow -j)"
