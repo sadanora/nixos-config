@@ -13,12 +13,61 @@ let
     "splash = false"
     ""
   ]);
+  clipboardShortcut = pkgs.writeShellScriptBin "hypr-clipboard-shortcut" ''
+    action="$1"
+    target="$2"
+    window_class="$3"
+
+    if [ -z "$target" ]; then
+      target="activewindow"
+    fi
+    if [ -z "$window_class" ]; then
+      window_class="$(${pkgs.hyprland}/bin/hyprctl activewindow -j | ${pkgs.jq}/bin/jq -r '.class // ""')"
+    fi
+
+    case "$action" in
+      copy)
+        key="C"
+        if [ "$window_class" = "kitty" ]; then
+          modifiers="CTRL SHIFT"
+        else
+          modifiers="CTRL"
+        fi
+        ;;
+      paste)
+        key="V"
+        if [ "$window_class" = "kitty" ]; then
+          modifiers="CTRL SHIFT"
+        else
+          modifiers="CTRL"
+        fi
+        ;;
+      cut)
+        key="X"
+        modifiers="CTRL"
+        ;;
+      *)
+        echo "usage: hypr-clipboard-shortcut {copy|paste|cut}" >&2
+        exit 2
+        ;;
+    esac
+
+    ${pkgs.hyprland}/bin/hyprctl dispatch sendshortcut "$modifiers, $key, $target"
+  '';
   clipboardMenu = pkgs.writeShellScriptBin "hypr-clipboard-menu" ''
+    active_window="$(${pkgs.hyprland}/bin/hyprctl activewindow -j)"
+    window_address="$(printf '%s' "$active_window" | ${pkgs.jq}/bin/jq -r '.address // ""')"
+    window_class="$(printf '%s' "$active_window" | ${pkgs.jq}/bin/jq -r '.class // ""')"
+    if [ -n "$window_address" ]; then
+      target="address:$window_address"
+    else
+      target="activewindow"
+    fi
     selection="$(cliphist list | rofi -dmenu -i -p clipboard)"
     if [ -n "$selection" ]; then
       printf '%s' "$selection" | cliphist decode | wl-copy
       sleep 0.05
-      hyprctl dispatch 'hl.dsp.send_shortcut("CTRL", "V", "activewindow")'
+      ${clipboardShortcut}/bin/hypr-clipboard-shortcut paste "$target" "$window_class"
     fi
   '';
   keybindings = pkgs.writeShellScriptBin "hypr-keybindings" ''
@@ -28,8 +77,11 @@ let
     Super + B            Browser
     Super + F            Fullscreen
     Super + K            Keybindings
-    Super + V            Clipboard history
-    Super + Shift + V    Audio control
+    Super + C            Copy
+    Super + V            Paste
+    Super + X            Cut
+    Super + Shift + V    Clipboard history
+    Super + Alt + V      Audio control
     Super + W/Q          Close window
     Super + M            Exit Hyprland
     Super + S            Toggle scratchpad
@@ -516,6 +568,7 @@ in
     btop
     networkmanagerapplet
     blueman
+    clipboardShortcut
     clipboardMenu
     keybindings
   ];
